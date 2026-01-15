@@ -50,7 +50,11 @@ public class RoomNodeSO : ScriptableObject
 
         EditorGUI.BeginChangeCheck();
 
-        if (parentRoomNodeIDList.Count > 0 || roomNodeType.isEntrance)
+        if (
+            parentRoomNodeIDList.Count > 0
+            || childRoomNodeIDList.Count > 0
+            || roomNodeType.isEntrance
+        )
         {
             EditorGUILayout.LabelField(roomNodeType.roomNodeTypeName);
         }
@@ -252,6 +256,29 @@ public class RoomNodeSO : ScriptableObject
         parentRoomNodeIDList.Add(parentID);
         return true;
     }
+
+    public bool RemoveChildRoomNodeIDFromRoomNode(string childID)
+    {
+        if (childRoomNodeIDList.Contains(childID))
+        {
+            childRoomNodeIDList.Remove(childID);
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool RemoveParentRoomNodeIDFromRoomNode(string parentID)
+    {
+        if (parentRoomNodeIDList.Contains(parentID))
+        {
+            parentRoomNodeIDList.Remove(parentID);
+            return true;
+        }
+
+        return false;
+    }
+
 #endif
     #endregion Editor Code
 }
