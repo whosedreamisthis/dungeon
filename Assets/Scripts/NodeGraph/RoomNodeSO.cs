@@ -167,7 +167,83 @@ public class RoomNodeSO : ScriptableObject
 
     public bool AddChildRoomNodeIDToRoomNode(string childID)
     {
-        childRoomNodeIDList.Add(childID);
+        if (IsChildRoomValid(childID))
+        {
+            childRoomNodeIDList.Add(childID);
+            return true;
+        }
+        return false;
+    }
+
+    private bool IsChildRoomValid(string childID)
+    {
+        bool isConnectedBossNodeAlready = false;
+        RoomNodeSO childRoomNode = roomNodeGraph.GetRoomNode(childID);
+
+        foreach (RoomNodeSO roomNode in roomNodeGraph.roomNodeList)
+        {
+            if (roomNode.roomNodeType.isBossRoom && roomNode.parentRoomNodeIDList.Count > 0)
+            {
+                isConnectedBossNodeAlready = true;
+                break;
+            }
+        }
+
+        if (childRoomNode.roomNodeType.isBossRoom && isConnectedBossNodeAlready)
+        {
+            return false;
+        }
+
+        if (childRoomNode.roomNodeType.isNone)
+        {
+            return false;
+        }
+
+        if (childRoomNodeIDList.Contains(childID))
+        {
+            return false;
+        }
+        if (id == childID)
+        {
+            return false;
+        }
+
+        if (parentRoomNodeIDList.Contains(childID))
+        {
+            return false;
+        }
+
+        if (childRoomNode.parentRoomNodeIDList.Count > 0)
+        {
+            return false;
+        }
+
+        if (childRoomNode.roomNodeType.isCorridor && roomNodeType.isCorridor)
+            return false;
+
+        if (!childRoomNode.roomNodeType.isCorridor && !roomNodeType.isCorridor)
+        {
+            return false;
+        }
+
+        if (
+            childRoomNode.roomNodeType.isCorridor
+            && childRoomNodeIDList.Count >= Settings.maxChildCorridors
+        )
+        {
+            return false;
+        }
+
+        if (childRoomNode.roomNodeType.isEntrance)
+        {
+            return false;
+        }
+
+        if (!childRoomNode.roomNodeType.isCorridor && childRoomNodeIDList.Count > 0)
+        {
+            return false;
+        }
+
         return true;
     }
 
