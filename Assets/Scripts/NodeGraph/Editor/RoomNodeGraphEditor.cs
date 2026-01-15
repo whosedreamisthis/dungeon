@@ -7,6 +7,7 @@ public class RoomNodeGraphEditor : EditorWindow
 {
     private GUIStyle roomNodeStyle;
     private static RoomNodeGraphSO currentRoomNodeGraph;
+    private RoomNodeSO currentRoomNode = null;
     private RoomNodeTypeListSO roomNodeTypeList;
     private const float nodeWidth = 160;
     private const float nodeHeight = 75;
@@ -69,7 +70,24 @@ public class RoomNodeGraphEditor : EditorWindow
 
     private void ProcessEvents(Event currentEvent)
     {
-        ProcessRoomNodeGraphEvents(currentEvent);
+        if (currentRoomNode == null || currentRoomNode.isLeftClickDragging == false)
+            currentRoomNode = IsMouseOverRoomNode(currentEvent);
+        if (currentRoomNode == null)
+            ProcessRoomNodeGraphEvents(currentEvent);
+        else
+            currentRoomNode.ProcessEvents(currentEvent);
+    }
+
+    private RoomNodeSO IsMouseOverRoomNode(Event currentEvent)
+    {
+        for (int i = currentRoomNodeGraph.roomNodeList.Count - 1; i >= 0; i--)
+        {
+            if (currentRoomNodeGraph.roomNodeList[i].rect.Contains(currentEvent.mousePosition))
+            {
+                return currentRoomNodeGraph.roomNodeList[i];
+            }
+        }
+        return null;
     }
 
     private void ProcessRoomNodeGraphEvents(Event currentEvent)
@@ -124,16 +142,3 @@ public class RoomNodeGraphEditor : EditorWindow
         AssetDatabase.SaveAssets();
     }
 }
-
-// GUILayout.BeginArea(
-//         new Rect(new Vector2(100, 100), new Vector2(nodeWidth, nodeHeight)),
-//         roomNodeStyle
-//     );
-//     EditorGUILayout.LabelField("Node 1");
-//     GUILayout.EndArea();
-//     GUILayout.BeginArea(
-//         new Rect(new Vector2(300, 300), new Vector2(nodeWidth, nodeHeight)),
-//         roomNodeStyle
-//     );
-//     EditorGUILayout.LabelField("Node 2");
-//     GUILayout.EndArea();
