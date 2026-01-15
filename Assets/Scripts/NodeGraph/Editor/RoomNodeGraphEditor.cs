@@ -9,6 +9,7 @@ public class RoomNodeGraphEditor : EditorWindow
     private static RoomNodeGraphSO currentRoomNodeGraph;
     private RoomNodeSO currentRoomNode = null;
     private RoomNodeTypeListSO roomNodeTypeList;
+    private float connectLineArrowSize = 10;
     private const float connectingLineWidth = 3;
     private const float nodeWidth = 160;
     private const float nodeHeight = 75;
@@ -86,6 +87,33 @@ public class RoomNodeGraphEditor : EditorWindow
     {
         Vector2 startPosition = parentRoomNode.rect.center;
         Vector2 endPosition = childRoomNode.rect.center;
+        Vector2 midPosition = (endPosition + startPosition) / 2;
+
+        Vector2 direction = endPosition - startPosition;
+        Vector2 arrowTailPoint1 =
+            midPosition + new Vector2(-direction.y, direction.x).normalized * connectLineArrowSize;
+        Vector2 arrowTailPoint2 =
+            midPosition - new Vector2(-direction.y, direction.x).normalized * connectLineArrowSize;
+
+        Vector2 arrowHeadPoint = midPosition + direction.normalized * connectLineArrowSize;
+        Handles.DrawBezier(
+            arrowHeadPoint,
+            arrowTailPoint1,
+            arrowHeadPoint,
+            arrowTailPoint1,
+            Color.white,
+            null,
+            connectingLineWidth
+        );
+        Handles.DrawBezier(
+            arrowHeadPoint,
+            arrowTailPoint2,
+            arrowHeadPoint,
+            arrowTailPoint2,
+            Color.white,
+            null,
+            connectingLineWidth
+        );
         Handles.DrawBezier(
             startPosition,
             endPosition,
