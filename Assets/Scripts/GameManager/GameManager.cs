@@ -1,0 +1,72 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Rendering.Universal;
+
+[DisallowMultipleComponent]
+public class GameManager : SingletonMonoBehaviour<GameManager>
+{
+    #region Header DUNGEON LEVELS
+    [Space(10)]
+    [Header("DUNGEON LEVELS")]
+    #endregion Header DUNGEON LEVELS
+    #region Tooltip
+    [Tooltip("Populate with the dungeon level scriptable objects")]
+    #endregion Tooltip
+    [SerializeField]
+    private List<DungeonLevelSO> dungeonLevelList;
+
+    #region Tooltip
+    [Tooltip("Populate wit h the starting dungeon level for testing, first level = 0")]
+    #endregion Tooltip
+    [SerializeField]
+    private int currentDungeonLevelListIndex = 0;
+
+    [HideInInspector]
+    public GameState gameState;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private void Start()
+    {
+        gameState = GameState.gameStarted;
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+        HandleGameState();
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            gameState = GameState.gameStarted;
+        }
+    }
+
+    private void HandleGameState()
+    {
+        switch (gameState)
+        {
+            case GameState.gameStarted:
+                PlayDungeonLevel(currentDungeonLevelListIndex);
+                gameState = GameState.playingLevel;
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void PlayDungeonLevel(int currentDungeonLevelListIndex) { }
+
+    #region  Validation
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        HelperUtilities.ValidateCheckEnumerableValues(
+            this,
+            nameof(dungeonLevelList),
+            dungeonLevelList
+        );
+    }
+
+#endif
+    #endregion  Validation
+}

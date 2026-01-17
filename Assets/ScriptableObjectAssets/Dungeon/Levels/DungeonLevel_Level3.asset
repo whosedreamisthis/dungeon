@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a84c7e3f3d4fa2643a4a106e3f865a51, type: 3}
   m_Name: DungeonLevel_Level3
   m_EditorClassIdentifier: Assembly-CSharp::DungeonLevelSO
-  levelName: 
+  levelName: The Spirit Catacombs
   roomTemplateList:
   - {fileID: 11400000, guid: 5e10298487db4a548a9e425ea037c915, type: 2}
   - {fileID: 11400000, guid: 9927e94b574775f4c83d6ac8ef1a7ea1, type: 2}
